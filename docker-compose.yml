@@ -1,0 +1,58 @@
+version: '3.8'
+services:
+  java-vhr:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ops-cy-245:9998/library/java-vhr:${BUILD_ID}
+    ports:
+      - "8070:8080"
+    depends_on:
+      - db
+      - redis
+      - rabbitmq
+    networks: 
+      app_net:  # 调用下面 networks 定义的 app_net 网络
+        ipv4_address: 172.16.10.13
+  
+  db:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: vhr
+      MYSQL_USER: cy
+      MYSQL_PASSWORD: 12345
+    networks: 
+      app_net:  # 调用下面 networks 定义的 app_net 网络
+        ipv4_address: 172.16.10.11
+      
+  redis:
+    image: redis:7.2.5-alpine
+    ports:
+      - "6380:6379"
+    command: redis-server --requirepass 123
+    networks: 
+      app_net:  # 调用下面 networks 定义的 app_net 网络
+        ipv4_address: 172.16.10.12
+    
+  rabbitmq:
+    image: rabbitmq:3.8.17-management-alpine
+    ports:
+      - "5672:5672"   # RabbitMQ 默认端口
+      - "15672:15672" # RabbitMQ 管理界面端口
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      app_net:
+        ipv4_address: 172.16.10.14
+    
+networks:
+  app_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+         - subnet: 172.16.10.0/24
