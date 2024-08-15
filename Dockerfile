@@ -35,7 +35,7 @@ RUN mkdir -p /root/.m2 && \
     '</settings>' > /root/.m2/settings.xml
 
 # 执行 Maven 构建
-RUN ./mvn clean package
+RUN mvn clean package
 
 # 使用一个更小的基础镜像作为运行环境
 FROM openjdk:17-slim
