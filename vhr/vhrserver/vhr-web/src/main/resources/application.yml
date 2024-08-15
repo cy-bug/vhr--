@@ -8,6 +8,7 @@ spring:
     username: guest
     password: guest
     host: 172.16.10.14
+    port: 5672
     publisher-confirms: true
     publisher-returns: true
   redis:
