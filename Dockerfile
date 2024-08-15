@@ -12,7 +12,7 @@ WORKDIR /app
 COPY . .
 
 # 安装必要的软件包
-RUN apt-get install -y wget curl unzip git
+RUN apt-get update && apt-get install -y wget curl unzip git
 
 # 下载 Maven
 RUN wget https://mirrors.huaweicloud.com/apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.zip \
