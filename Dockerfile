@@ -1,6 +1,10 @@
 # 使用 OpenJDK 作为基础镜像
 FROM openjdk:17-slim
 
+# 设置阿里云的 Debian 源
+RUN sed -i 's|http://deb.debian.org/debian|http://mirrors.aliyun.com/debian|g' /etc/apt/sources.list \
+    && sed -i 's|http://security.debian.org/debian-security|http://mirrors.aliyun.com/debian-security|g' /etc/apt/sources.list
+
 # 设置工作目录
 WORKDIR /app
 
@@ -8,7 +12,7 @@ WORKDIR /app
 COPY . .
 
 # 安装必要的软件包
-RUN apt-get update && apt-get install -y wget curl unzip git
+RUN apt-get install -y wget curl unzip git
 
 # 下载 Maven
 RUN wget https://mirrors.huaweicloud.com/apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.zip \
